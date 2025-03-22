@@ -1,4 +1,4 @@
-import User from '../model/User';
+import User from '../../core/user/model/User';
 
 class UserRepositoryInMemory {
   private static readonly items: User[] = [];

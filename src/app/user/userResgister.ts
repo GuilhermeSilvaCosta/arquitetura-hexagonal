@@ -1,17 +1,25 @@
 import UserRegister from '@/core/user/service/UserRegister';
-import TerminalUtil from '../util/TerminalUtil';
+import TerminalUtil from '@/app/util/TerminalUtil';
 import User from '@/core/user/model/User';
+import PasswordEncrypt from '@/adapter/auth/PasswordEncrypt';
+import UserRepositoryPg from '@/adapter/db/UserRepositoryPg';
 
 export default async function userRegister() {
-  TerminalUtil.title('Registrar Usuário');
+  try {
+    TerminalUtil.title('Registrar Usuário');
 
-  const name = await TerminalUtil.requireField('Nome: ', 'User teste');
-  const email = await TerminalUtil.requireField('Email: ', 'user@teste.com');
-  const password = await TerminalUtil.requireField('Senha: ', 'abcdef');
+    const name = await TerminalUtil.requireField('Nome: ', 'User teste');
+    const email = await TerminalUtil.requireField('Email: ', 'user@teste.com');
+    const password = await TerminalUtil.requireField('Senha: ', 'abcdef');
 
-  const user: User = { name, email, password };
+    const user: User = { name, email, password };
+    const userRegister = new UserRegister(UserRepositoryPg, PasswordEncrypt);
+    await userRegister.execute(user);
 
-  await UserRegister.execute(user);
-
-  await TerminalUtil.awaitPressEnter();
+    TerminalUtil.success('Usuário registrado com sucesso');
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await TerminalUtil.awaitPressEnter();
+  }
 }

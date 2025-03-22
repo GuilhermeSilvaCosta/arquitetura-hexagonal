@@ -18,7 +18,7 @@ export default async function menuFundamentals() {
     case 1:
       await dip();
       break;
-    case 3:
+    case 2:
       return;
   }
 
